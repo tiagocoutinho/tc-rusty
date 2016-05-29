@@ -1,0 +1,11 @@
+[package]
+name = "tc-rusty"
+version = "0.1.0"
+authors = ["Jose Tiago Macara Coutinho <coutinhotiago@gmail.com>"]
+
+[lib]
+name = "tcrusty"
+path = "src/lib.rs"
+crate-type = ["dylib"]
+
+[dependencies]
