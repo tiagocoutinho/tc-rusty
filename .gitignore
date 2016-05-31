@@ -4,6 +4,9 @@
 *.rlib
 *.dll
 
+*.pyc
+*.pyo
+
 # Executables
 *.exe
 
