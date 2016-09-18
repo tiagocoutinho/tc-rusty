@@ -16,5 +16,5 @@ test: build
 	python fib.py
 
 clean:
-	rm -f fib.o libfib.debug.so libfib.so
-
+	rm -rf fib.o libfib.debug.so libfib.release.so libfib.so
+	cargo clean
