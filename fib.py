@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import time
+
 from cffi import FFI
 
+ffi = FFI()
+ffi.cdef('int fib(int);')
+
 def get_fib_from_lib(name):
-    ffi = FFI()
-    ffi.cdef('int fib(int);')
     return ffi.dlopen(name).fib
 
 # ---- RUST -------------------------------------
