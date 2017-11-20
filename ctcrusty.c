@@ -17,3 +17,15 @@ int fib(int64_t n) {
     }
     return sum;
 }
+
+int count_doubles(const char* val, int l) {
+    int total = 0;
+    char last = val[0];
+    for(int i=1; i<l;i++) {
+        if (last == val[i]) {
+            total += 1;
+	}
+        last = val[i];
+    }
+    return total;
+}
