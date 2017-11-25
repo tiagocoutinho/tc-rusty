@@ -60,9 +60,8 @@ def simple_timeit(mod_name, fname, expected, repeat):
     rmap = {}
     exec('{setup}\nr = {stmt}'.format(setup=setup, stmt=stmt), rmap)
     r = rmap['r']
-    assert r == expected, \
-        "expected {0} for {1}. Got {2}".format(expected, fname, r)
-
+    assert numpy.all(r == expected), \
+            "expected {0} for {1}. Got {2}".format(expected, fname, r)
     total_time = timeit.timeit(setup=setup, stmt=stmt, number=repeat)
     return total_time / float(repeat)
 

@@ -36,3 +36,13 @@ characters are equal*
 **sum of all items in a numpy 2D array of int64**
 
 ![sum 2D items](doc/isum2d.png)
+
+## Mandelbrot
+
+*create a mandelbrot set*
+
+### 5 iterations
+![mandelbrot](doc/mandelbrot_5.png)
+
+### 20 iterations
+![mandelbrot](doc/mandelbrot_20.png)
