@@ -31,9 +31,11 @@ def count_doubles_pythran(val, n):
         last = cur
     return total
 
-
-
-
-
-
+#pythran export sum2d_pythran(int[][], int, int)
+def sum2d_pythran(arr, m, n):
+    result = 0.0
+    for i in range(m):
+        for j in range(n):
+            result += arr[i,j]
+    return result
 

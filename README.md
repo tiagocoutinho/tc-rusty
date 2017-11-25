@@ -4,12 +4,19 @@ Tiago Coutinho's python adventures in the Rust world
 
 # Benchmarks
 
-## Count doubles
+### Hardware
+DELL laptop Latitude E7440 (Intel i7 vPro 4 Core 3.3GHz; 8Gb RAM)
 
-*given a buffer of ASCII chars, count the number of times two adjacent
-characters are equal*
+### Software
 
-And here are the latest results comparing:
+* Linux Mint 18 Sarah 64 bits
+* Inside a conda environment: [conda packages](doc/conda_list.txt)
+* CPython 2.7.14 |Anaconda, Inc.
+* GCC 5.4.0
+* LLVM 3.8.0
+* Rust 1.21.0 stable
+
+### Comparation
 
 * Python - pure python implementation
 * [Numba](http://http://numba.pydata.org)
@@ -17,16 +24,15 @@ And here are the latest results comparing:
 * [Rust](http://www.rust-lang.org) with binding to python using [CFFI](http://cffi.rtfd.io)
 * [Pythran](http://pythran.rtfd.io)
 
+## Count doubles
+
+*given a buffer of ASCII chars, count the number of times two adjacent
+characters are equal*
+
 ![count doubles bech results](doc/count_doubles.png)
 
-### Hardware
-DELL laptop Latitude E7440 (Intel i7 vPro 4 Core 3.3GHz; 8Gb RAM)
+## isum2d
 
-### Software
+**sum of all items in a numpy 2D array of int64**
 
-* Linux Mint 18 Sarah 64 bits
-* Inside a conda environment: [conda packages](doc/count_doubles_conda_list.txt), [pip packages](doc/count_doubles_pip_list.txt)
-* CPython 2.7.14 |Anaconda, Inc.
-* GCC 5.4.0
-* LLVM 3.8.0
-* Rust 1.21.0 stable
+![sum 2D items](doc/isum2d.png)
