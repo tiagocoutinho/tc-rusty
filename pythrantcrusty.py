@@ -11,8 +11,8 @@ def fib_pythran(n):
     return sum
 
 
-#pythran export count_doubles_pythran(str)
-def count_doubles_pythran(val):
+#pythran export count_doubles_pythran_zip(str, int)
+def count_doubles_pythran_zip(val, n):
     total = 0
     for c1, c2 in zip(val, val[1:]):
         if c1 == c2:
@@ -20,21 +20,11 @@ def count_doubles_pythran(val):
     return total
 
 
-#pythran export icount_doubles_pythran(str)
-def icount_doubles_pythran(val):
+#pythran export count_doubles_pythran(str, int)
+def count_doubles_pythran(val, n):
     total = 0
-    for c1, c2 in zip(val, val[1:]):
-        if c1 == c2:
-            total += 1
-    return total
-
-
-#pythran export count_doubles_pythran_specialized(str)
-def count_doubles_pythran_specialized(val):
-    total = 0
-    l = len(val)
     last = val[0]
-    for i in range(1, l):
+    for i in range(1, n):
         cur = val[i]
         if last == cur:
             total += 1

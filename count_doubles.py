@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import random
 import string
 import itertools
+import functools
 
+import six
+import numpy
 
 from tools import GCContext, run
 from tools import c_debug, c_release
@@ -14,97 +18,80 @@ from tools import rust_debug, rust_release
 # ---- RUST -------------------------------------
 
 count_doubles_rust_debug = rust_debug.count_doubles
-count_doubles_rust_release = rust_release.count_doubles
+count_doubles_rust = rust_release.count_doubles
 
 # ---- C ----------------------------------------
 
 count_doubles_c_debug = c_debug.count_doubles
-count_doubles_c_release = c_release.count_doubles
+count_doubles_c = c_release.count_doubles
 
 # ---- PYTHON -----------------------------------
 
-def count_doubles_py(val):
-    total = 0
-    for c1, c2 in zip(val, val[1:]):
-        if c1 == c2:
-            total += 1
-    return total
-
-
-def icount_doubles_py(val):
+def count_doubles_python(val, n):
     total = 0
     for c1, c2 in itertools.izip(val, val[1:]):
         if c1 == c2:
             total += 1
     return total
-
 
 # ---- PYTHON NUMBA -----------------------------
 
 import numba
 
+def numba_numpy(f):
+    @functools.wraps(f)
+    def wrapper(val, n):
+        val = numpy.frombuffer(val, dtype=numpy.uint8)
+        return f(val, n)
+    return wrapper
+
+@numba_numpy
 @numba.jit
-def count_doubles_numba_lazy(val):
+def count_doubles_numba(val, n):
     total = 0
     for c1, c2 in zip(val, val[1:]):
         if c1 == c2:
             total += 1
     return total
 
-
-@numba.jit
-def icount_doubles_numba_lazy(val):
-    total = 0
-    for c1, c2 in itertools.izip(val, val[1:]):
-        if c1 == c2:
-            total += 1
-    return total
-
-
-@numba.jit
-def count_doubles_numba_specialized(val):
-    total = 0
-    l = len(val)
-    last = val[0]
-    for i in range(1, l):
-        cur = val[i]
-        if last == cur:
-            total += 1
-        last = cur
-    return total
-
-
 # ---- PYTHON PYTHRAN ---------------------------
 
-from pythrantcrusty import (count_doubles_pythran,
-                            icount_doubles_pythran,
-                            count_doubles_pythran_specialized)
+from pythrantcrusty import count_doubles_pythran, count_doubles_pythran_zip
+
 
 # -----------------------------------------------
 
-if __name__ == "__main__":
-    N = 10000000
-    data = ''.join(random.choice(string.ascii_letters)
-                   for i in range(N))
+def get_data():
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+    data_file = os.path.join(this_dir, 'count_doubles.data')
+    if os.path.isfile(data_file):
+        with open(data_file, 'rb') as f:
+            data = f.read()
+    else:
+        six.print_('Generating data...', end='', flush=True)
+        N = 10000000
+        data = ''.join(random.choice(string.ascii_letters)
+                       for i in range(N))
+        with open(data_file, 'wb') as f:
+            f.write(data)
+        six.print_('[DONE]')
+    return data
 
+data = get_data()
+ARGS = [data, len(data)]
+
+def main():
     TESTS = (
-#        ('rust_debug', count_doubles_rust_debug),
-#        ('rust_release', count_doubles_rust_release),
-        ('c_debug', lambda x: count_doubles_c_debug(x, N)),
-        ('c_release', lambda x: count_doubles_c_release(x, N)),
-        ('numba lazy', count_doubles_numba_lazy),
-        ('inumba lazy', icount_doubles_numba_lazy),
-        ('numba specialized', count_doubles_numba_specialized),
-        #    ('numba_eager', count_doubles_numba_eager),
-        ('pt', count_doubles_pythran),
-        ('ipt', icount_doubles_pythran),
-        ('pt_specialized', count_doubles_pythran),
-        ('py', count_doubles_py),
-        ('ipy', icount_doubles_py),
+        'count_doubles_rust',
+        'count_doubles_c',
+        'count_doubles_numba',
+        'count_doubles_pythran',
+        'count_doubles_python',
     )
 
-    ref = count_doubles_py(data)
-    for name, f in TESTS:
-        assert ref == f(data)
+    expected = count_doubles_c(*ARGS)
+    run('count_doubles', TESTS, expected=expected, repeat=10)
 
-    run(TESTS, (data,))
+
+if __name__ == "__main__":
+    main()

@@ -25,8 +25,8 @@ pub extern fn fib(n: i64) -> i64 {
 }
 
 #[no_mangle]
-pub extern fn count_doubles(val: &[u8]) -> i32 {
-    let l: usize = val.len() - 1;
+pub extern fn count_doubles(val: &[u8], n: usize) -> i32 {
+    let l = val.len() - 1;
     let mut total: i32 = 0;
     let mut last: u8 = val[0];
     let mut i: usize = 1;

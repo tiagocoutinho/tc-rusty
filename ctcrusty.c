@@ -18,14 +18,15 @@ int fib(int64_t n) {
     return sum;
 }
 
-int count_doubles(const char* val, int l) {
-    int total = 0;
+int32_t count_doubles(const char* val, int l) {
+    int32_t total = 0;
     char last = val[0];
     for(int i=1; i<l;i++) {
-        if (last == val[i]) {
-            total += 1;
+        char cur = val[i];
+        if (last == cur) {
+	    total++;
 	}
-        last = val[i];
+        last = cur;
     }
     return total;
 }

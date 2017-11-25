@@ -1,3 +1,5 @@
+six
 cffi
 numba
 matplotlib
+pythran
